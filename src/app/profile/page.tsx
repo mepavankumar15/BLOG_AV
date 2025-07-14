@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ChangeEvent, FormEvent } from 'react';
+import {  FormEvent } from 'react';
 
 interface Post {
   id: number;
@@ -25,8 +25,6 @@ export default function ProfilePage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [newUserId, setNewUserId] = useState('');
-  const [changeStatus, setChangeStatus] = useState('');
   const [newUsername, setNewUsername] = useState('');
   const [usernameStatus, setUsernameStatus] = useState('');
 
@@ -72,45 +70,6 @@ export default function ProfilePage() {
     await supabase.auth.signOut();
     router.push('/');
   };
-
-  async function handleChangeUserId(e: FormEvent) {
-    e.preventDefault();
-    setChangeStatus('Processing...');
-    if (!newUserId) {
-      setChangeStatus('Please enter a new user ID.');
-      return;
-    }
-    // 1. Check if newUserId already exists in profiles
-    const { data: existingProfile } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('id', newUserId)
-      .single();
-    if (existingProfile) {
-      setChangeStatus('That user ID is already taken.');
-      return;
-    }
-    // 2. Update profiles table
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({ id: newUserId })
-      .eq('id', profile?.id);
-    if (profileError) {
-      setChangeStatus('Error updating profile: ' + profileError.message);
-      return;
-    }
-    // 3. Update posts table
-    const { error: postsError } = await supabase
-      .from('posts')
-      .update({ user_id: newUserId })
-      .eq('user_id', profile?.id);
-    if (postsError) {
-      setChangeStatus('Error updating posts: ' + postsError.message);
-      return;
-    }
-    setChangeStatus('User ID changed successfully! Please sign out and log in again.');
-    setProfile((prev) => prev ? { ...prev, id: newUserId } : prev);
-  }
 
   async function handleChangeUsername(e: FormEvent) {
     e.preventDefault();
