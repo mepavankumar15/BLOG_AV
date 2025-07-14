@@ -49,16 +49,14 @@ const handler = NextAuth({
     },
     // @ts-expect-error: NextAuth session.user type augmentation limitation
     async session({ session, token }: { session: Session; token: JWT }) {
-      if (token.sub) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if (!session.user) session.user = {} as any;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (session.user as any).id = token.sub;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (session.user as any).email = token.email;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (session.user as any).name = token.name;
-      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (!session.user) session.user = {} as any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session.user as any).id = token.sub;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session.user as any).email = token.email;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (session.user as any).name = token.name;
       return session;
     },
   },
