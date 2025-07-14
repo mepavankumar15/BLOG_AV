@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth/next';
 import { supabase } from '@/lib/supabase/client';
+import { JWT } from "next-auth/jwt";
+import { Session, User } from "next-auth";
 
 const handler = NextAuth({
   providers: [
@@ -34,17 +36,15 @@ const handler = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, user }: { token: unknown; user?: unknown }) {
-      if (user && typeof user === 'object' && user !== null && 'id' in user && 'email' in user) {
-        // @ts-expect-error: dynamic user object
-        token = { ...token, sub: user.id, email: user.email };
+    async jwt({ token, user }: { token: JWT; user?: User }) {
+      if (user) {
+        token.sub = user.id;
+        token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }: { session: unknown; token: unknown }) {
-      // @ts-expect-error: dynamic session/token object
-      if (token && typeof token === 'object' && token !== null && 'sub' in token && session && typeof session === 'object' && session !== null && 'user' in session) {
-        // @ts-expect-error: dynamic session.user
+    async session({ session, token }: { session: Session; token: JWT }) {
+      if (token.sub && session.user) {
         session.user.id = token.sub;
       }
       return session;
