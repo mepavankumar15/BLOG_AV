@@ -3,9 +3,10 @@ import { supabase } from '@/lib/supabase/client';
 import PostCard from '@/app/components/blog/PostCard';
 
 export default async function BlogPage() {
+  // Fetch posts with author name from profiles table using correct join syntax
   const { data: posts } = await supabase
     .from('posts')
-    .select('id, title, slug, created_at, profiles(name)')
+    .select('id, title, slug, created_at, profiles!user_id(name)')
     .eq('published', true)
     .order('created_at', { ascending: false });
 
@@ -27,11 +28,9 @@ export default async function BlogPage() {
           
           <div className="grid gap-8 max-w-4xl mx-auto">
             {posts?.map((post, index) => {
-              // Extract the author name correctly
-              const authorName = post.profiles && Array.isArray(post.profiles) 
-                ? post.profiles[0]?.name 
-                : null;
-                
+              // Extract the author name from the joined profiles table
+              const authorName = post.profiles?.name ?? "Unknown";
+              
               return (
                 <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                   <PostCard
@@ -46,7 +45,6 @@ export default async function BlogPage() {
             
             {(!posts || posts.length === 0) && (
               <div className="text-center py-16">
-                
                 <h3 className="text-2xl font-bold text-white mb-2">No posts yet</h3>
                 <p className="text-[#71767b]">Be the first to share your story!</p>
               </div>
