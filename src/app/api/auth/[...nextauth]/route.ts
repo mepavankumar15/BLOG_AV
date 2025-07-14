@@ -36,19 +36,24 @@ const handler = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: any }) {
-      if (user) {
+    async jwt({ token, user }: { token: JWT; user?: unknown }) {
+      if (user && typeof user === "object" && user !== null && "id" in user && "email" in user) {
+        // @ts-expect-error: user shape is dynamic
         token.sub = user.id;
+        // @ts-expect-error: user shape is dynamic
         token.email = user.email;
+        // @ts-expect-error: user shape is dynamic
         token.name = user.name;
       }
       return token;
     },
+    // @ts-expect-error: NextAuth session.user type augmentation limitation
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token.sub) {
-        if (!session.user) session.user = {} as typeof session.user;
-        // @ts-expect-error: user is augmented via next-auth.d.ts
-        session.user.id = token.sub;
+        if (!session.user) session.user = {} as any;
+        (session.user as any).id = token.sub;
+        (session.user as any).email = token.email;
+        (session.user as any).name = token.name;
       }
       return session;
     },
