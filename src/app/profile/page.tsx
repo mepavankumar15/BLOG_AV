@@ -130,13 +130,16 @@ export default function ProfilePage() {
               <div className="w-16 h-16 bg-gradient-to-r from-[#1d9bf0] to-[#667eea] rounded-full flex items-center justify-center mx-auto mb-4">
               </div>
               <h3 className="text-xl font-bold text-white mb-2">No posts yet</h3>
-              <p className="text-[#71767b] mb-4">Start writing your first blog post!</p>
+
+              <p  className="text-[#71767b] mb-4">Start writing your first blog post!</p>
+              <div id="the-post">
               <Link
-                href="/blog/create"
+                href="/blog/create" 
                 className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
               >
                 Write Your First Post
               </Link>
+              </div>
             </div>
           ) : (
             <div className="grid gap-4">
@@ -163,10 +166,10 @@ export default function ProfilePage() {
           )}
         </div>
         
-        <div className="text-center mt-8">
+        <div id="sign-out" className="text-center mt-8">
           <button
             onClick={handleSignOut}
-            className="px-8 py-3 text-lg font-bold border-2 border-red-500 text-red-500 rounded-full hover:bg-red-500 hover:text-white transition-all duration-200 hover:scale-105"
+            className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
           >
             Sign Out
           </button>

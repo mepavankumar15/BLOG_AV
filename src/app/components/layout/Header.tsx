@@ -81,7 +81,7 @@ export default function Header() {
                 ) : (
                   <Link
                     href="/profile"
-                    className="px-6 py-2 rounded-full text-white hover:bg-[#16181c] hover:text-[#1d9bf0] transition-all duration-200 hover:scale-105 font-bold"
+                    className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
                   >
                     Profile
                   </Link>
