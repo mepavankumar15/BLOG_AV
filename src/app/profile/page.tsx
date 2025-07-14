@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ChangeEvent, FormEvent } from 'react';
 
 interface Post {
   id: number;
@@ -23,6 +24,8 @@ export default function ProfilePage() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [newUserId, setNewUserId] = useState('');
+  const [changeStatus, setChangeStatus] = useState('');
 
   useEffect(() => {
     async function fetchProfileAndPosts() {
@@ -65,6 +68,45 @@ export default function ProfilePage() {
     await supabase.auth.signOut();
     router.push('/');
   };
+
+  async function handleChangeUserId(e: FormEvent) {
+    e.preventDefault();
+    setChangeStatus('Processing...');
+    if (!newUserId) {
+      setChangeStatus('Please enter a new user ID.');
+      return;
+    }
+    // 1. Check if newUserId already exists in profiles
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('id', newUserId)
+      .single();
+    if (existingProfile) {
+      setChangeStatus('That user ID is already taken.');
+      return;
+    }
+    // 2. Update profiles table
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .update({ id: newUserId })
+      .eq('id', profile?.id);
+    if (profileError) {
+      setChangeStatus('Error updating profile: ' + profileError.message);
+      return;
+    }
+    // 3. Update posts table
+    const { error: postsError } = await supabase
+      .from('posts')
+      .update({ user_id: newUserId })
+      .eq('user_id', profile?.id);
+    if (postsError) {
+      setChangeStatus('Error updating posts: ' + postsError.message);
+      return;
+    }
+    setChangeStatus('User ID changed successfully! Please sign out and log in again.');
+    setProfile((prev) => prev ? { ...prev, id: newUserId } : prev);
+  }
 
   if (loading) {
     return (
@@ -113,6 +155,7 @@ export default function ProfilePage() {
                 {profile.name || "Anonymous User"}
               </h2>
               <p className="text-[#71767b]">{profile.email}</p>
+              <p className="text-[#71767b] text-xs mt-2">User ID: {profile.id}</p>
             </div>
             <Link
               href="/blog/create"
@@ -121,6 +164,21 @@ export default function ProfilePage() {
               Create Post
             </Link>
           </div>
+          {/* Change User ID Form */}
+          <form onSubmit={handleChangeUserId} className="mt-4 space-y-2">
+            <label className="block text-sm text-white font-semibold mb-1">
+              Change User ID (must be unique):
+            </label>
+            <input
+              type="text"
+              value={newUserId}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewUserId(e.target.value)}
+              className="border px-2 py-1 rounded w-full text-black"
+              required
+            />
+            <button type="submit" className="btn-premium px-4 py-1 text-sm font-bold mt-2">Change User ID</button>
+            {changeStatus && <div className="text-xs mt-1 text-[#1d9bf0]">{changeStatus}</div>}
+          </form>
         </div>
         
         <div className="space-y-6">
