@@ -1,2 +1,11 @@
-// This file is no longer needed as we're using Supabase instead of NextAuth
-// Keeping it empty to avoid import errors
+import NextAuth from "next-auth";
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      email: string;
+      name?: string | null;
+    }
+  }
+}

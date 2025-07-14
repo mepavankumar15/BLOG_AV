@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth/next';
 import { supabase } from '@/lib/supabase/client';
 import { JWT } from "next-auth/jwt";
-import { Session, User } from "next-auth";
 
 const handler = NextAuth({
   providers: [
@@ -36,14 +35,14 @@ const handler = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: User }) {
+    async jwt({ token, user }: { token: JWT; user?: { id: string; email: string; name: string | null } }) {
       if (user) {
         token.sub = user.id;
         token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    async session({ session, token }: { session: { user: { id: string; email: string; name: string | null } }; token: JWT }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
       }
