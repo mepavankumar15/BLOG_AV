@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth/next';
 import { supabase } from '@/lib/supabase/client';
 import { JWT } from "next-auth/jwt";
+import { Session } from "next-auth";
 
 const handler = NextAuth({
   providers: [
@@ -35,15 +36,18 @@ const handler = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, user }: { token: JWT; user?: { id: string; email: string; name: string | null } }) {
+    async jwt({ token, user }: { token: JWT; user?: any }) {
       if (user) {
         token.sub = user.id;
         token.email = user.email;
+        token.name = user.name;
       }
       return token;
     },
-    async session({ session, token }: { session: { user: { id: string; email: string; name: string | null } }; token: JWT }) {
-      if (token.sub && session.user) {
+    async session({ session, token }: { session: Session; token: JWT }) {
+      if (token.sub) {
+        if (!session.user) session.user = {} as typeof session.user;
+        // @ts-expect-error: user is augmented via next-auth.d.ts
         session.user.id = token.sub;
       }
       return session;
