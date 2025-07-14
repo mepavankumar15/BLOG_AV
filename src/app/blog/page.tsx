@@ -28,9 +28,17 @@ export default async function BlogPage() {
           
           <div className="grid gap-8 max-w-4xl mx-auto">
             {posts?.map((post, index) => {
-              // Extract the author name from the joined profiles table
-              const authorName = post.profiles?.name ?? "Unknown";
-              
+              // Handle both object and array for profiles
+              let authorName = "Unknown";
+              if (post.profiles) {
+                if (Array.isArray(post.profiles)) {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  authorName = (post.profiles as any[])[0]?.name ?? "Unknown";
+                } else {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  authorName = (post.profiles as any).name ?? "Unknown";
+                }
+              }
               return (
                 <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
                   <PostCard
