@@ -22,7 +22,7 @@ export default function HomePage() {
           <p className="text-lg lg:text-xl text-[#71767b] mb-8 max-w-2xl mx-auto leading-relaxed">
             Share your thoughts, stories, and ideas with the world. Create, publish, and discover amazing content in a premium experience.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div id= "explore-blogs" className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="/blog"
               className="btn-premium px-6 py-3 text-base font-bold hover:scale-105 transition-transform duration-200"
@@ -33,20 +33,20 @@ export default function HomePage() {
         </div>
         
         {/* Feature highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
-          <div className="card p-8 text-center hover-lift">
-            <h3 className="text-xl font-bold text-white mb-6">Rich Content Creation</h3>
-            <p className="text-sm text-[#71767b] leading-relaxed mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto mb-20 p-4 lg:p-8">
+          <div id="rich-content" className="card rich-content-card text-center hover-lift shadow-2xl border-2 border-[#1d9bf0] bg-[#10141a]/80 scale-105 transition-all duration-300 space-y-6">
+            <h3 className="text-2xl font-extrabold text-white">Rich Content Creation</h3>
+            <p className="text-base text-[#b0b3b8] leading-relaxed">
               Create beautiful posts with full markdown support, including headers, lists, code blocks, and rich formatting. Express your ideas with complete creative freedom.
             </p>
-            <div className="text-xs text-[#1d9bf0] font-semibold">
+            <div className="text-sm text-[#1d9bf0] font-bold tracking-wide">
               • Markdown Support • Code Highlighting • Rich Text Formatting • Image Embedding
             </div>
           </div>
           
-          <div className="card p-8 text-center hover-lift">
-            <h3 className="text-xl font-bold text-white mb-6">Vibrant Community</h3>
-            <p className="text-sm text-[#71767b] leading-relaxed mb-6">
+          <div id="community" className="card rich-content-card text-center hover-lift space-y-6">
+            <h3 className="text-xl font-bold text-white">Vibrant Community</h3>
+            <p className="text-sm text-[#71767b] leading-relaxed">
               Connect with writers and readers from around the world. Share insights, discover new perspectives, and build meaningful connections through thoughtful content.
             </p>
             <div className="text-xs text-[#1d9bf0] font-semibold">
@@ -54,9 +54,9 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="card p-8 text-center hover-lift">
-            <h3 className="text-xl font-bold text-white mb-6">Fast & Modern Platform</h3>
-            <p className="text-sm text-[#71767b] leading-relaxed mb-6">
+          <div id="platform" className="card rich-content-card text-center hover-lift space-y-6">
+            <h3 className="text-xl font-bold text-white">Fast & Modern Platform</h3>
+            <p className="text-sm text-[#71767b] leading-relaxed">
               Built with cutting-edge technologies like Next.js and Supabase for lightning-fast performance, real-time updates, and a seamless user experience.
             </p>
             <div className="text-xs text-[#1d9bf0] font-semibold">
@@ -66,20 +66,6 @@ export default function HomePage() {
         </div>
         
         {/* Additional section */}
-        <div className="text-center">
-          <div className="card p-8 max-w-2xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-4">Ready to Start Writing?</h2>
-            <p className="text-[#71767b] mb-8">
-              Join our community of writers and share your stories with the world.
-            </p>
-            <Link
-              href="/signup"
-              className="btn-premium px-8 py-3 text-base font-bold hover:scale-105 transition-all duration-200"
-            >
-              Create Your Account
-            </Link>
-          </div>
-        </div>
       </div>
     </div>
   );

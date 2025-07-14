@@ -49,13 +49,13 @@ export default function Header() {
           <div className="flex items-center space-x-8">
             <Link
               href="/"
-              className="px-4 py-2 rounded-full text-white hover:bg-[#16181c] hover:text-[#1d9bf0] transition-all duration-200 hover:scale-105 text-sm font-semibold"
+              className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
             >
               Home
             </Link>
             <Link
               href="/blog"
-              className="px-4 py-2 rounded-full text-white hover:bg-[#16181c] hover:text-[#1d9bf0] transition-all duration-200 hover:scale-105 text-sm font-semibold"
+              className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
             >
               Blogs
             </Link>
@@ -67,7 +67,7 @@ export default function Header() {
                   <>
                     <Link
                       href="/login"
-                      className="px-6 py-2 rounded-full border-2 border-[#2f3336] text-white font-bold hover:bg-[#16181c] hover:border-[#1d9bf0] transition-all duration-200 hover:scale-105"
+                      className="btn-premium px-6 py-2 text-sm font-bold hover:scale-105 transition-all duration-200"
                     >
                       Sign In
                     </Link>

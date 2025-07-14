@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .nothing-font {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+  .feature-card {
+    padding: 6rem;
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12rem;
+  }
+}
+
+/* మిగతా custom styles, components, etc... */
+
 /* X (Twitter) Rich Theme */
 :root {
   --x-blue: #1d9bf0;
@@ -24,6 +42,19 @@
   padding: 0;
   margin: 0;
 }
+
+#rich-content , #community , #platform {
+  box-sizing: content-box;
+  padding: 2.5rem;
+  margin: 0.5rem;
+}
+
+#explore-blogs {
+  box-sizing: content-box;
+  padding: 1.5rem;
+  margin: 0.5rem;
+}
+
 
 html,
 body {
@@ -195,7 +226,7 @@ header .btn-premium::before {
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
+  transition: left 0.2s;
 }
 
 header .btn-premium:hover::before {
@@ -204,7 +235,7 @@ header .btn-premium:hover::before {
 
 header .btn-premium:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(29, 155, 240, 0.3);
+  box-shadow: 0 6px 25px rgba(29, 155, 240, 0.3);
 }
 
 /* Border Button Style */
