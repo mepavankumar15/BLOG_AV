@@ -5,11 +5,11 @@ export interface Credentials {
 }
 
 export interface JWTParams {
-  token: any;
-  user?: any;
+  token: unknown;
+  user?: unknown;
 }
 
 export interface SessionParams {
-  session: any;
-  token: any;
+  session: unknown;
+  token: unknown;
 }

@@ -89,6 +89,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
               {children}
             </td>
           ),
+          // Note: Next.js recommends using <Image /> from 'next/image' for optimization. If you want to optimize images, replace <img> with <Image /> and handle props accordingly.
           img: ({ src, alt }) => (
             <img src={src} alt={alt} className="max-w-full h-auto rounded-lg my-6 shadow-x-lg" />
           ),

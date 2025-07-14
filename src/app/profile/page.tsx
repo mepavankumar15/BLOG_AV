@@ -83,7 +83,7 @@ export default function ProfilePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-[#000000] via-[#0f0f0f] to-[#16181c]"></div>
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <div className="text-[#71767b] text-lg mb-4">
-            You haven't logged in yet.
+            You haven&apos;t logged in yet.
           </div>
           <Link href="/login" className="text-[#1d9bf0] hover:text-[#1a8cd8] font-bold transition-colors duration-200">
             Sign in to continue
@@ -177,8 +177,4 @@ export default function ProfilePage() {
       </div>
     </div>
   );
-}
-
-function toNullableString(value: unknown): string | null {
-  return typeof value === 'string' ? value : null;
 } 

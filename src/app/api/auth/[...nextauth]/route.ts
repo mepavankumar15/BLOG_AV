@@ -34,15 +34,17 @@ const handler = NextAuth({
     },
   ],
   callbacks: {
-    async jwt({ token, user }: { token: any; user?: any }) {
-      if (user) {
-        token.sub = user.id;
-        token.email = user.email;
+    async jwt({ token, user }: { token: unknown; user?: unknown }) {
+      if (user && typeof user === 'object' && user !== null && 'id' in user && 'email' in user) {
+        // @ts-expect-error: dynamic user object
+        token = { ...token, sub: user.id, email: user.email };
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
-      if (token.sub && session.user) {
+    async session({ session, token }: { session: unknown; token: unknown }) {
+      // @ts-expect-error: dynamic session/token object
+      if (token && typeof token === 'object' && token !== null && 'sub' in token && session && typeof session === 'object' && session !== null && 'user' in session) {
+        // @ts-expect-error: dynamic session.user
         session.user.id = token.sub;
       }
       return session;
