@@ -17,6 +17,7 @@ interface Profile {
   id: string;
   name: string | null;
   email: string | null;
+  username?: string | null;
 }
 
 export default function ProfilePage() {
@@ -26,6 +27,8 @@ export default function ProfilePage() {
   const router = useRouter();
   const [newUserId, setNewUserId] = useState('');
   const [changeStatus, setChangeStatus] = useState('');
+  const [newUsername, setNewUsername] = useState('');
+  const [usernameStatus, setUsernameStatus] = useState('');
 
   useEffect(() => {
     async function fetchProfileAndPosts() {
@@ -40,7 +43,7 @@ export default function ProfilePage() {
       // Fetch profile
       const { data: profileData } = await supabase
         .from("profiles")
-        .select("id, name")
+        .select("id, name, username")
         .eq("id", user.id)
         .single();
       setProfile({
@@ -51,6 +54,7 @@ export default function ProfilePage() {
             ? user.user_metadata.name
             : null,
         email: typeof user.email === "string" ? user.email : null,
+        username: typeof profileData?.username === "string" ? profileData.username : null,
       });
       // Fetch posts
       const { data: postsData } = await supabase
@@ -108,6 +112,36 @@ export default function ProfilePage() {
     setProfile((prev) => prev ? { ...prev, id: newUserId } : prev);
   }
 
+  async function handleChangeUsername(e: FormEvent) {
+    e.preventDefault();
+    setUsernameStatus('Processing...');
+    if (!newUsername) {
+      setUsernameStatus('Please enter a new username.');
+      return;
+    }
+    // Check if username is unique
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', newUsername)
+      .single();
+    if (existingProfile) {
+      setUsernameStatus('That username is already taken.');
+      return;
+    }
+    // Update username
+    const { error } = await supabase
+      .from('profiles')
+      .update({ username: newUsername })
+      .eq('id', profile?.id);
+    if (error) {
+      setUsernameStatus('Error updating username: ' + error.message);
+      return;
+    }
+    setUsernameStatus('Username changed successfully!');
+    setProfile((prev) => prev ? { ...prev, username: newUsername } : prev);
+  }
+
   if (loading) {
     return (
       <div className="py-12 lg:py-16 bg-[#000000] min-h-screen relative overflow-hidden">
@@ -155,6 +189,9 @@ export default function ProfilePage() {
                 {profile.name || "Anonymous User"}
               </h2>
               <p className="text-[#71767b]">{profile.email}</p>
+              {profile.username && (
+                <p className="text-[#1d9bf0] text-xs mt-1">Username: {profile.username}</p>
+              )}
               <p className="text-[#71767b] text-xs mt-2">User ID: {profile.id}</p>
             </div>
             <Link
@@ -164,20 +201,20 @@ export default function ProfilePage() {
               Create Post
             </Link>
           </div>
-          {/* Change User ID Form */}
-          <form onSubmit={handleChangeUserId} className="mt-4 space-y-2">
+          {/* Account Settings: Change Username */}
+          <form onSubmit={handleChangeUsername} className="mt-4 space-y-2">
             <label className="block text-sm text-white font-semibold mb-1">
-              Change User ID (must be unique):
+              Change Username (must be unique):
             </label>
             <input
               type="text"
-              value={newUserId}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setNewUserId(e.target.value)}
+              value={newUsername}
+              onChange={e => setNewUsername(e.target.value)}
               className="border px-2 py-1 rounded w-full text-black"
               required
             />
-            <button type="submit" className="btn-premium px-4 py-1 text-sm font-bold mt-2">Change User ID</button>
-            {changeStatus && <div className="text-xs mt-1 text-[#1d9bf0]">{changeStatus}</div>}
+            <button type="submit" className="btn-premium px-4 py-1 text-sm font-bold mt-2">Change Username</button>
+            {usernameStatus && <div className="text-xs mt-1 text-[#1d9bf0]">{usernameStatus}</div>}
           </form>
         </div>
         
