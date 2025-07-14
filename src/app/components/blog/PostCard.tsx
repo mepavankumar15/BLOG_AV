@@ -37,7 +37,13 @@ export default function PostCard({ title, slug, author, date }: PostCardProps) {
         {/* Read more indicator */}
         <div className="mt-4 flex items-center text-[#1d9bf0] font-semibold group-hover:translate-x-2 transition-transform duration-200">
           <span>Read more</span>
-          <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg
+            style={{ width: '1.5rem', height: '1.5rem' }}
+            className="ml-2 group-hover:translate-x-1 transition-transform duration-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </div>

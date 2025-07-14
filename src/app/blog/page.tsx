@@ -3,12 +3,16 @@ import { supabase } from '@/lib/supabase/client';
 import PostCard from '@/app/components/blog/PostCard';
 
 export default async function BlogPage() {
-  // Fetch posts with author name from profiles table using correct join syntax
-  const { data: posts } = await supabase
+  // Fetch posts without join for debugging
+  const { data: posts, error } = await supabase
     .from('posts')
-    .select('id, title, slug, created_at, profiles!user_id(name)')
+    .select('*')
     .eq('published', true)
     .order('created_at', { ascending: false });
+
+  // Debug log
+  // eslint-disable-next-line no-console
+  console.log('Fetched posts:', posts, 'Error:', error);
 
   return (
     <div className="py-16 lg:py-24 bg-[#000000] min-h-screen">
@@ -27,29 +31,16 @@ export default async function BlogPage() {
           </div>
           
           <div className="grid gap-8 max-w-4xl mx-auto">
-            {posts?.map((post, index) => {
-              // Handle both object and array for profiles
-              let authorName = "Unknown";
-              if (post.profiles) {
-                if (Array.isArray(post.profiles)) {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  authorName = (post.profiles as any[])[0]?.name ?? "Unknown";
-                } else {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  authorName = (post.profiles as any).name ?? "Unknown";
-                }
-              }
-              return (
-                <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
-                  <PostCard
-                    title={post.title}
-                    slug={post.slug}
-                    author={authorName}
-                    date={post.created_at}
-                  />
-                </div>
-              );
-            })}
+            {posts?.map((post, index) => (
+              <div key={post.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <PostCard
+                  title={post.title}
+                  slug={post.slug}
+                  author={post.user_id}
+                  date={post.created_at}
+                />
+              </div>
+            ))}
             
             {(!posts || posts.length === 0) && (
               <div className="text-center py-16">
